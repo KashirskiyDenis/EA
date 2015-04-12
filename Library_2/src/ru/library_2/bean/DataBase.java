@@ -156,5 +156,7 @@ public class DataBase {
 		pstatment.executeQuery();
 	}
 	
-	
+	private void synchronize() {
+		
+	}
 }
