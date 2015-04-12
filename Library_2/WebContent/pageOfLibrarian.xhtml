@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+<head>
+	<meta charset="utf-8"></meta>
+	<link rel="stylesheet" href="css/style.css"></link>
+	<link rel="shortcut icon"
+		href="http://www.rw-designer.com/book-library.png" type="image/png"></link>
+	<!-- Для элементов input и текста ru-->
+	<link
+		href='http://fonts.googleapis.com/css?family=Lora&amp;subset=latin,cyrillic'
+		rel='stylesheet' type='text/css'></link>
+	<!-- Для заголовка формы ru-->
+	<link
+		href='http://fonts.googleapis.com/css?family=Marck+Script&amp;subset=latin,cyrillic'
+		rel='stylesheet' type='text/css'></link>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script src="script/javascript.js"></script>
+	<title>Page of librarian</title>
+</head>
+<body>
+	<f:view>
+		<div class="content">
+			<div class="librarian-books">
+				<p class="title-ru">Список книг на руках</p>
+				<h:dataTable value="#{librarianBean.listBookOnHand}" 
+					var="bOH"
+					styleClass="list-of-books"
+					headerClass="table-header"
+					rowClasses="">
+						<h:column>
+							<f:facet name="header">Название книги</f:facet>
+							#{bOH.title}
+						</h:column>
+						<h:column>
+							<f:facet name="header">Ф.И.О.</f:facet>
+							#{bOH.fio}
+						</h:column>
+						<h:column>
+							<f:facet name="header">Дата возврата</f:facet>
+							#{bOH.dIn}
+						</h:column>
+						<h:column>
+							<f:facet name="header">Сумма штрафа</f:facet>
+							#{bOH.penalty}
+						</h:column>
+						<h:column>
+							<f:facet name="header">Вернуть</f:facet>
+							<h:commandButton class="input button" value="Вернуть" />
+						</h:column>
+				</h:dataTable>
+			</div>
+		</div>
+
+		<div class="take-book">
+			<div id="take"></div>
+		</div>
+
+		<div id="auth">
+			<div class="sign">
+				<p class="title-ru">Выдать книгу</p>
+				<div class="input-elements">
+					<h:inputText class="input" a:placeholder="Введите ФИО получателя" /><br></br> 
+					<h:inputText class="input" a:placeholder="Введите название книги" /><br></br>
+					<p>Дата выдачи</p>
+					<h:inputText id="date-out" class="input" a:placeholder="dd-mm-yyyy">
+						<f:convertDateTime pattern="dd-mm-yyyy" />
+					</h:inputText><br></br>
+					<p>Дата возврата</p>
+					<h:inputText id="date-in" class="input" a:placeholder="dd-mm-yyyy">
+						<f:convertDateTime pattern="dd-mm-yyyy" />
+					</h:inputText><br></br>
+					<h:commandButton class="input button" value="Выдать"/>
+				</div>
+			</div>
+		</div>
+	</f:view>
+</body>
+</html>
