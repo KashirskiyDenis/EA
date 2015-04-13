@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
@@ -48,7 +49,7 @@ public class DataBase {
 			return -1;
 	}
 
-	public User findUser(int id) throws Exception {
+	public User getUserInfo(int id) throws Exception {
 		String sql = "SELECT fam, name, otch, name_dolgn, name_otdel, date_rab, salary, uvolen "
 				+ "FROM SORT, OTDEL, DOLGN "
 				+ "WHERE SORT.kod_dolgn = DOLGN.kod_dolgn AND "
@@ -156,7 +157,22 @@ public class DataBase {
 		pstatment.executeQuery();
 	}
 	
-	private void synchronize() {
+	static {
+		Timer time = new Timer();
+		ScheduledTask st = new ScheduledTask();
+		time.schedule(st, 0, 1000); // Создаем задачу с повторением через 1 сек.
 		
+		for (int i = 0; i <= 5; i++) {
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				System.out.println(e.getMessage());
+			}
+			System.out.println("Execution in Main Thread. #" + i);
+			if (i == 5) {
+				System.out.println("Application Terminates");
+				//System.exit(0);
+			}
+		}
 	}
 }

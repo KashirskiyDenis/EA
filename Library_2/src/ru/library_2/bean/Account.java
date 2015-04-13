@@ -50,7 +50,7 @@ public class Account {
 		try {
 			int id = db.checkUser(login, password);
 			if (id != -1) {
-				user = db.findUser(id);
+				user = db.getUserInfo(id);
 				user.setListOfBooks(db.getBooksOnHand(id));
 				return "pageOfUser";
 			}
