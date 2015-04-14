@@ -49,15 +49,19 @@ public class Account {
 	public String signIn() {
 		try {
 			int id = db.checkUser(login, password);
+			System.out.println(id);
 			if (id != -1) {
-				user = db.getUserInfo(id);
+				String fio = db.getFioById(id);
+				System.out.println(fio);
+				user = db.getUserInfo(fio);
 				user.setListOfBooks(db.getBooksOnHand(id));
 				return "pageOfUser";
 			}
 			return null;
 		} catch (Exception e) {
-			return null;
+			System.out.println(e.getMessage());
 		}
+		return null;
 	}
 
 }
