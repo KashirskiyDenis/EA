@@ -1,7 +1,5 @@
 package ru.library_2.bean;
 
-import java.util.*;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;

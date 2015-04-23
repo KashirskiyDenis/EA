@@ -6,9 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
@@ -38,14 +35,6 @@ public class DataBase {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-/*
-		if (connectionMySQl != null && connectionOracle != null) {
-			Timer time = new Timer();
-			ScheduledTask task = new ScheduledTask();
-			long step = 21600000;
-			time.schedule(task, 0, step);
-		}
-		*/
 	}
 
 	public int checkUser(String login, String password) throws Exception {
@@ -212,63 +201,4 @@ public class DataBase {
 		result.next();
 		return result.getString("data_in");
 	}
-	/*
-	public List<String> getFioFromOracle() throws Exception {
-		String sql = "SELECT UPPER(fam || ' ' || name || ' ' || otch) as fio FROM sotr WHERE uvolen = 'Í'";
-		PreparedStatement pstatment = connectionOracle.prepareStatement(sql);
-		ResultSet result = pstatment.executeQuery();
-		List<String> list = new ArrayList<String>();
-
-		while (result.next()) {
-			String tmp = result.getString("fio");
-			System.out.println(tmp);
-			list.add(result.getString("fio").toUpperCase());
-		}
-		return list;
-	}
-
-	public List<String> getFioFromOracleUvolen() throws Exception {
-		String sql = "SELECT UPPER(fam || ' ' || name || ' ' || otch) as fio FROM sotr WHERE uvolen = 'Ä'";
-		PreparedStatement pstatment = connectionOracle.prepareStatement(sql);
-		ResultSet result = pstatment.executeQuery();
-		List<String> list = new ArrayList<String>();
-
-		while (result.next()) {
-			list.add(result.getString("fio").toString().toUpperCase());
-		}
-		return list;
-	}
-
-	public List<String> getFioFromMySQL() throws Exception {
-		String sql = "SELECT UPPER(fio) as fio FROM reader";
-		PreparedStatement pstatment = connectionOracle.prepareStatement(sql);
-		ResultSet result = pstatment.executeQuery();
-		List<String> list = new ArrayList<String>();
-
-		while (result.next()) {
-			list.add(result.getString("fio").toString().toUpperCase());
-		}
-		return list;
-	}
-
-	public void addNewReader(String fio, String login, String password)
-			throws Exception {
-		String sql = "INSERT INTO reader (fio, login, password) VALUES (?, ?, ?, ?)";
-		PreparedStatement pstatment = connectionMySQl.prepareStatement(sql);
-		pstatment.setString(1, fio);
-		pstatment.setString(2, login);
-		pstatment.setString(3, password);
-		pstatment.executeQuery();
-	}
-
-	public void deleteReader(String fio) throws Exception {
-		int id = getIdReaderByFio(fio);
-
-		String sql = "DELETE FROM reader WHERE id = ? AND "
-				+ "id NOT IN (SELECT idREader FROM bookonhands WHERE status = 0)";
-		PreparedStatement pstatment = connectionMySQl.prepareStatement(sql);
-		pstatment.setInt(1, id);
-		pstatment.executeQuery();
-	}
-	*/
 }
