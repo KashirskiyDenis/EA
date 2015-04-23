@@ -1,5 +1,6 @@
 package ru.library_2.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -11,15 +12,15 @@ import ru.library_2.entities.*;
 @ManagedBean(name="librarianBean")
 @SessionScoped
 public class LibrarianBean {
-
-	private List<BookOnHand> listBookOnHand;
+	
+	@ManagedProperty(value = "#{dbBean}")
+	private DataBase db;
+	
+	private List<BookOnHand> listBookOnHand = new ArrayList<BookOnHand>();
 	private String fio;
 	private String title;
 	private String dOut;
 	private String dIn;
-
-	@ManagedProperty(value = "#{dbBean}")
-	private DataBase db;
 
 	public List<BookOnHand> getListBookOnHand() {
 		return listBookOnHand;
@@ -31,6 +32,11 @@ public class LibrarianBean {
 
 	public void setDb(DataBase db) {
 		this.db = db;
+		try {
+			this.listBookOnHand = db.getBooksOnHand();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 	public String getFio() {
@@ -75,7 +81,7 @@ public class LibrarianBean {
 		this.title = "";
 		this.dOut = "";
 		this.dIn = "";
-		return null;
+		return "pageOfLibrarian";
 	}
 
 	public String returnBook() {

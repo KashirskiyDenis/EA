@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
@@ -37,6 +38,14 @@ public class DataBase {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+/*
+		if (connectionMySQl != null && connectionOracle != null) {
+			Timer time = new Timer();
+			ScheduledTask task = new ScheduledTask();
+			long step = 21600000;
+			time.schedule(task, 0, step);
+		}
+		*/
 	}
 
 	public int checkUser(String login, String password) throws Exception {
@@ -52,18 +61,19 @@ public class DataBase {
 	}
 
 	public User getUserInfo(String fio) throws Exception {
-		String tmp [] = fio.split(" ");
+		String tmp[] = fio.split(" ");
 		String sql = "SELECT kod_sotr, name_dolgn, name_otdel, date_rab, salary, uvolen "
 				+ "FROM SOTR, OTDEL, DOLGN "
 				+ "WHERE SOTR.kod_dolgn = DOLGN.kod_dolgn AND "
-				+ "SOTR.kod_otdel = OTDEL.kod_otdel AND UPPER(SOTR.fam) = UPPER(?) AND UPPER(SOTR.name) = UPPER(?) AND UPPER(SOTR.otch) = UPPER(?) ";
+				+ "SOTR.kod_otdel = OTDEL.kod_otdel AND "
+				+ "UPPER(SOTR.fam) = ? AND UPPER(SOTR.name) = ? AND UPPER(SOTR.otch) = ?";
 		PreparedStatement pstatement = connectionOracle.prepareStatement(sql);
 		pstatement.setString(1, tmp[0]);
 		pstatement.setString(2, tmp[1]);
 		pstatement.setString(3, tmp[2]);
 		ResultSet result = pstatement.executeQuery();
 		result.next();
-		
+
 		int id = result.getInt("kod_sotr");
 		String date_rab = result.getString("date_rab");
 		String dolgn = result.getString("name_dolgn");
@@ -78,8 +88,9 @@ public class DataBase {
 
 	public List<BookOnHand> getBooksOnHand() throws Exception {
 		String sql = "SELECT bookonhands.id as id, title, fio, date_in, penalty "
-				+ "FROM bookonhands " + "WHERE return = 0";
-
+				+ "FROM bookonhands, reader, book "
+				+ "WHERE bookonhands.idreader = reader.id AND "
+				+ "bookonhands.idbook = book.id AND " + "status = 0";
 		PreparedStatement pstatment = connectionMySQl.prepareStatement(sql);
 		ResultSet result = pstatment.executeQuery();
 		List<BookOnHand> list = new ArrayList<BookOnHand>();
@@ -97,11 +108,15 @@ public class DataBase {
 
 	public List<BookOnHand> getBooksOnHand(int id) throws Exception {
 		String sql = "SELECT bookonhands.id as id, title, fio, date_in, penalty "
-				+ "FROM bookonhands WHERE status = 0 AND idreader = ?";
+				+ "FROM bookonhands, reader, book "
+				+ "WHERE bookonhands.idreader = reader.id AND "
+				+ "bookonhands.idbook = book.id AND "
+				+ "status = 0 AND idreader = ?";
 		PreparedStatement pstatment = connectionMySQl.prepareStatement(sql);
 		pstatment.setInt(1, id);
 		ResultSet result = pstatment.executeQuery();
 		List<BookOnHand> list = new ArrayList<BookOnHand>();
+
 		while (result.next()) {
 			int idRec = result.getInt("id");
 			String title = result.getString("title");
@@ -122,11 +137,18 @@ public class DataBase {
 		int idBook = getIdBookByTitle(title);
 		if (idBook == -1)
 			return;
+		if (!bookINnStorage(idBook))
+			return;
 
-		String sql = "INSERT INTO bookonhands "
+		String sql = "UPDATE book SET amount = amount - 1 WHERE id = ?";
+		PreparedStatement pstatment = connectionMySQl.prepareStatement(sql);
+		pstatment.setInt(1, idBook);
+		pstatment.executeQuery();
+
+		sql = "INSERT INTO bookonhands "
 				+ "(idbook, idreader, date_out, date_in) "
 				+ "VALUES (?, ?, ?, ?)";
-		PreparedStatement pstatment = connectionMySQl.prepareStatement(sql);
+		pstatment = connectionMySQl.prepareStatement(sql);
 		pstatment.setInt(1, idBook);
 		pstatment.setInt(2, idReader);
 		pstatment.setString(3, dOut);
@@ -153,15 +175,15 @@ public class DataBase {
 			return result.getInt("id");
 		return -1;
 	}
-	
+
 	public String getFioById(int id) throws Exception {
 		String sql = "SELECT fio FROM reader WHERE id = ?";
 		PreparedStatement pstatment = connectionMySQl.prepareStatement(sql);
 		pstatment.setInt(1, id);
 		ResultSet result = pstatment.executeQuery();
 		result.next();
-		
-		return result.getString("fio");
+
+		return result.getString("fio").toUpperCase();
 	}
 
 	public void returnBook(int id) throws Exception {
@@ -171,15 +193,82 @@ public class DataBase {
 		pstatment.setInt(1, id);
 		pstatment.executeQuery();
 	}
-	
+
+	public boolean bookINnStorage(int id) throws Exception {
+		String sql = "SELECT amount FROM book WHERE amount > 0 AND id = ?";
+		PreparedStatement pstatment = connectionMySQl.prepareStatement(sql);
+		pstatment.setInt(1, id);
+		ResultSet result = pstatment.executeQuery();
+		if (result.next())
+			return true;
+		return false;
+	}
+
+	public String getDateReturn(int id) throws Exception {
+		String sql = "SELECT date_in FROM bookohheands WHERE idBook = ? ORDER BY date_in";
+		PreparedStatement pstatment = connectionMySQl.prepareStatement(sql);
+		pstatment.setInt(1, id);
+		ResultSet result = pstatment.executeQuery();
+		result.next();
+		return result.getString("data_in");
+	}
 	/*
-	 * static { Timer time = new Timer(); ScheduledTask st = new
-	 * ScheduledTask(); time.schedule(st, 0, 1000); // Создаем задачу с
-	 * повторением через 1 сек.
-	 * 
-	 * for (int i = 0; i <= 5; i++) { try { Thread.sleep(3000); } catch
-	 * (InterruptedException e) { System.out.println(e.getMessage()); }
-	 * System.out.println("Execution in Main Thread. #" + i); if (i == 5) {
-	 * System.out.println("Application Terminates"); //System.exit(0); } } }
-	 */
+	public List<String> getFioFromOracle() throws Exception {
+		String sql = "SELECT UPPER(fam || ' ' || name || ' ' || otch) as fio FROM sotr WHERE uvolen = 'Н'";
+		PreparedStatement pstatment = connectionOracle.prepareStatement(sql);
+		ResultSet result = pstatment.executeQuery();
+		List<String> list = new ArrayList<String>();
+
+		while (result.next()) {
+			String tmp = result.getString("fio");
+			System.out.println(tmp);
+			list.add(result.getString("fio").toUpperCase());
+		}
+		return list;
+	}
+
+	public List<String> getFioFromOracleUvolen() throws Exception {
+		String sql = "SELECT UPPER(fam || ' ' || name || ' ' || otch) as fio FROM sotr WHERE uvolen = 'Д'";
+		PreparedStatement pstatment = connectionOracle.prepareStatement(sql);
+		ResultSet result = pstatment.executeQuery();
+		List<String> list = new ArrayList<String>();
+
+		while (result.next()) {
+			list.add(result.getString("fio").toString().toUpperCase());
+		}
+		return list;
+	}
+
+	public List<String> getFioFromMySQL() throws Exception {
+		String sql = "SELECT UPPER(fio) as fio FROM reader";
+		PreparedStatement pstatment = connectionOracle.prepareStatement(sql);
+		ResultSet result = pstatment.executeQuery();
+		List<String> list = new ArrayList<String>();
+
+		while (result.next()) {
+			list.add(result.getString("fio").toString().toUpperCase());
+		}
+		return list;
+	}
+
+	public void addNewReader(String fio, String login, String password)
+			throws Exception {
+		String sql = "INSERT INTO reader (fio, login, password) VALUES (?, ?, ?, ?)";
+		PreparedStatement pstatment = connectionMySQl.prepareStatement(sql);
+		pstatment.setString(1, fio);
+		pstatment.setString(2, login);
+		pstatment.setString(3, password);
+		pstatment.executeQuery();
+	}
+
+	public void deleteReader(String fio) throws Exception {
+		int id = getIdReaderByFio(fio);
+
+		String sql = "DELETE FROM reader WHERE id = ? AND "
+				+ "id NOT IN (SELECT idREader FROM bookonhands WHERE status = 0)";
+		PreparedStatement pstatment = connectionMySQl.prepareStatement(sql);
+		pstatment.setInt(1, id);
+		pstatment.executeQuery();
+	}
+	*/
 }

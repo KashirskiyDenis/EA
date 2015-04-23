@@ -1,5 +1,6 @@
 package ru.library_2.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
@@ -11,7 +12,7 @@ public class User {
 	private String otdel;
 	private String uvolen;
 	private double salary;
-	private List<BookOnHand> listOfBooks;
+	private List<BookOnHand> listOfBooks = new ArrayList<BookOnHand>();
 
 	public User(int id, String fio, String date_rab, String dolgn,
 			String otdel, String uvolen, double salary) {
@@ -88,5 +89,14 @@ public class User {
 		this.listOfBooks = listOfBooks;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "Id = " + id +
+				"\nfio = " + fio +
+				"\ndate_rab = " + date_rab +
+				"\ndolgn = " + dolgn +
+				"\notdel = " + otdel +
+				"\nuvolen = " + uvolen +
+				"\nsalary = " + salary;
+	}
 }

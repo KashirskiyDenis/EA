@@ -1,20 +1,19 @@
-package ru.library_2.bean;
+package ru.Library_2_Synchronization;
 
-import java.util.*;
+import java.util.List;
+import java.util.Random;
 
-import javax.faces.bean.ManagedProperty;
+public class Program {
 
-public class ScheduledTask extends TimerTask {
-
-	@ManagedProperty(value = "#{dbBean}")
 	private DataBase db;
-
 	private List<String> listFioFromOracle;
 	private List<String> listFioFromMySQL;
 
-	@Override
-	public void run() {
-		/*
+	public Program() {
+		db = new DataBase();
+	}
+
+	public void synchronization() {
 		try {
 			listFioFromOracle = db.getFioFromOracle();
 			if (listFioFromOracle == null)
@@ -53,7 +52,6 @@ public class ScheduledTask extends TimerTask {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		*/
 	}
 
 	private String getNewPassword() {
@@ -64,9 +62,5 @@ public class ScheduledTask extends TimerTask {
 		}
 
 		return password.toString();
-	}
-
-	public void setDb(DataBase db) {
-		this.db = db;
 	}
 }

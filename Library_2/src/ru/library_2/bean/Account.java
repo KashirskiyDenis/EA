@@ -1,10 +1,12 @@
 package ru.library_2.bean;
 
+import java.util.*;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
-import ru.library_2.entities.User;
+import ru.library_2.entities.*;
 
 @ManagedBean
 @SessionScoped
@@ -52,7 +54,6 @@ public class Account {
 			System.out.println(id);
 			if (id != -1) {
 				String fio = db.getFioById(id);
-				System.out.println(fio);
 				user = db.getUserInfo(fio);
 				user.setListOfBooks(db.getBooksOnHand(id));
 				return "pageOfUser";
