@@ -49,10 +49,10 @@ public class Account {
 	public String signIn() {
 		try {
 			int id = db.checkUser(login, password);
-			System.out.println(id);
 			if (id != -1) {
 				String fio = db.getFioById(id);
-				user = db.getUserInfo(fio);
+				//user = db.getUserInfo(fio);
+				user = new User(fio);
 				user.setListOfBooks(db.getBooksOnHand(id));
 				return "pageOfUser";
 			}

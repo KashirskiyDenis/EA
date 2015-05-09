@@ -131,17 +131,26 @@ body {
 .list-of-books td {
 	padding: 5px;
 }
-.list-of-books .table-header {
+.list-of-books th {
+	padding: 5px;
+}
+.list-of-books thead {
 	text-align: center;
 	color: #8480FF;
 	font-weight: 600;
 }
-.list-of-books .table-header td {
+.list-of-books thead th {
 	border-bottom-style: solid;
 	border-bottom-width: 1px;
 	border-bottom-color: inherit;
 }
 .list-of-books tr td {
+	border-left-style: solid;
+	border-left-color: inherit;
+	border-left-width: 1px;
+}
+
+.list-of-books tr th {
 	border-left-style: solid;
 	border-left-color: inherit;
 	border-left-width: 1px;
@@ -157,14 +166,23 @@ body {
 	border-left-color: inherit;
 	border-left-width: 0px;
 }
+
+.list-of-books tr th:first-child {
+	border-right-style: solid;
+	border-right-color: inherit;
+	border-right-width: 0px;	
+	border-left-style: solid;
+	border-left-color: inherit;
+	border-left-width: 0px;
+}
 .list-of-books tr td:last-child {
 	text-align: center;
 }
-.list-of-books .table-body tr {
+.list-of-books tbody tr {
 	transition-duration: 250ms;
 	transition-property: all;
 }
-.list-of-books .table-body tr:hover {
+.list-of-books tbody tr:hover {
 	background-color: rgba(55, 55, 55 , 0.7);
 }
 

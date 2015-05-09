@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
-<head>
+<h:head>
 	<meta charset="utf-8"></meta>
 	<link rel="stylesheet" href="css/style.css"></link>
 	<link rel="shortcut icon"
@@ -20,8 +21,9 @@
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="script/javascript.js"></script>
+	<h:outputScript library="javax.faces" name="jsf.js" target="head" />
 	<title>Page of librarian</title>
-</head>
+</h:head>
 <body>
 	<f:view>
 		<div class="content">
@@ -46,11 +48,18 @@
 						</h:column>
 						<h:column>
 							<f:facet name="header">Сумма штрафа</f:facet>
-							#{bOH.penalty}
+							#{bOH.penalty} &#8381;
 						</h:column>
 						<h:column>
 							<f:facet name="header">Вернуть</f:facet>
-							<h:commandButton class="input button" value="Вернуть" />
+							<h:form>
+								<h:commandButton class="input button"
+									actionListener="#{librarianBean.returnBook}"
+									value="Вернуть">
+									<f:attribute name="name" value="#{bOH.id}-#{bOH.idBook}" />
+		          				</h:commandButton>
+								
+							</h:form>
 						</h:column>
 				</h:dataTable>
 			</div>
@@ -61,22 +70,43 @@
 		</div>
 
 		<div id="auth">
-			<div class="sign">
+			<h:form class="sign">
 				<p class="title-ru">Выдать книгу</p>
 				<div class="input-elements">
-					<h:inputText class="input" a:placeholder="Введите ФИО получателя" /><br></br> 
-					<h:inputText class="input" a:placeholder="Введите название книги" /><br></br>
+					<h:inputText id="fio"
+						class="input" 
+						a:placeholder="Введите ФИО получателя"
+						value="#{librarianBean.fio}">
+					</h:inputText><br></br> 
+					<h:inputText id="title"
+						class="input" 
+						a:placeholder="Введите название книги" 
+						value="#{librarianBean.title}">
+					</h:inputText><br></br>
 					<p>Дата выдачи</p>
-					<h:inputText id="date-out" class="input" a:placeholder="dd-mm-yyyy">
-						<f:convertDateTime pattern="dd-mm-yyyy" />
+					<h:inputText id="date-out" 
+						class="input" 
+						a:placeholder="yyyy-mm-dd"
+						value="#{librarianBean.dOut}">
 					</h:inputText><br></br>
 					<p>Дата возврата</p>
-					<h:inputText id="date-in" class="input" a:placeholder="dd-mm-yyyy">
-						<f:convertDateTime pattern="dd-mm-yyyy" />
+					<h:inputText id="date-in" 
+						class="input" 
+						a:placeholder="yyyy-mm-dd"
+						value="#{librarianBean.dIn}">
 					</h:inputText><br></br>
-					<h:commandButton class="input button" value="Выдать"/>
+					<h:outputText id="output" 
+						value="#{librarianBean.message}" 
+						style="color: #F00;"></h:outputText><br></br>
+					<h:commandButton class="input button" 
+						value="Проверить" 
+						action="#{librarianBean.check }"
+						style="width: auto;">
+						<f:ajax execute="@form" render="output"></f:ajax>
+					</h:commandButton>
+					<h:commandButton class="input button" value="Выдать" action="#{librarianBean.takeBook }"/>
 				</div>
-			</div>
+			</h:form>
 		</div>
 	</f:view>
 </body>

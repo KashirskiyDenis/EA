@@ -12,7 +12,7 @@ public class User {
 	private String otdel;
 	private String uvolen;
 	private double salary;
-	private List<BookOnHand> listOfBooks = new ArrayList<BookOnHand>();
+	private ArrayList<BookOnHand> listOfBooks = new ArrayList<BookOnHand>();
 
 	public User(int id, String fio, String date_rab, String dolgn,
 			String otdel, String uvolen, double salary) {
@@ -23,6 +23,10 @@ public class User {
 		this.otdel = otdel;
 		this.uvolen = uvolen;
 		this.salary = salary;
+	}
+
+	public User(String fio) {
+		this.fio = fio;
 	}
 
 	public int getId() {
@@ -81,11 +85,11 @@ public class User {
 		this.fio = fio;
 	}
 
-	public List<BookOnHand> getListOfBooks() {
+	public ArrayList<BookOnHand> getListOfBooks() {
 		return listOfBooks;
 	}
 
-	public void setListOfBooks(List<BookOnHand> listOfBooks) {
+	public void setListOfBooks(ArrayList<BookOnHand> listOfBooks) {
 		this.listOfBooks = listOfBooks;
 	}
 

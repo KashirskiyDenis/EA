@@ -64,9 +64,7 @@
 				<p class="title-ru">Список книг на руках</p>
 				<h:dataTable value="#{account.user.listOfBooks}" 
 					var="bOH"
-					styleClass="list-of-books"
-					headerClass="table-header"
-					rowClasses="">
+					styleClass="list-of-books">
 						<h:column>
 							<f:facet name="header">Название книги</f:facet>
 							#{bOH.title}

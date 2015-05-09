@@ -3,14 +3,16 @@ package ru.library_2.entities;
 public class BookOnHand {
 
 	private int id;
+	private int idBook;
 	private String title;
 	private String fio;
 	private String dIn;
 	private double penalty;
 
-	public BookOnHand(int id, String title, String fio, String dIn,
+	public BookOnHand(int id, int idBook, String title, String fio, String dIn,
 			double penalty) {
 		this.id = id;
+		this.idBook = idBook;
 		this.title = title;
 		this.fio = fio;
 		this.dIn = dIn;
@@ -23,6 +25,14 @@ public class BookOnHand {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public int getIdBook() {
+		return idBook;
+	}
+
+	public void setIdBook(int idBook) {
+		this.idBook = idBook;
 	}
 
 	public String getTitle() {
