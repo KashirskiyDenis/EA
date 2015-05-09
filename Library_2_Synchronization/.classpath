@@ -2,5 +2,15 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="lib" path="lib/com.mysql.jdbc_5.1.5.jar"/>
+	<classpathentry kind="lib" path="lib/ojdbc5_g.jar"/>
+	<classpathentry kind="lib" path="lib/ojdbc5.jar"/>
+	<classpathentry kind="lib" path="lib/ojdbc5dms_g.jar"/>
+	<classpathentry kind="lib" path="lib/ojdbc5dms.jar"/>
+	<classpathentry kind="lib" path="lib/ojdbc6_g.jar"/>
+	<classpathentry kind="lib" path="lib/ojdbc6.jar"/>
+	<classpathentry kind="lib" path="lib/ojdbc6dms_g.jar"/>
+	<classpathentry kind="lib" path="lib/ojdbc6dms.jar"/>
+	<classpathentry kind="lib" path="lib/simplefan.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -5,6 +5,7 @@ public class Runner {
 	public static void main(String[] args) {
 		Program prg = new Program();
 		prg.synchronization();
+		prg.updatePenalty();
 	}
 
 }

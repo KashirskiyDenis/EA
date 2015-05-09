@@ -35,9 +35,9 @@ public class Transliterator {
         charMap.put('×', "Ch");
         charMap.put('Ø', "Sh");
         charMap.put('Ù', "Sh");
-        charMap.put('Ú', "'");
+        charMap.put('Ú', "");
         charMap.put('Û', "Y");
-        charMap.put('Ü', "'");
+        charMap.put('Ü', "");
         charMap.put('İ', "E");
         charMap.put('Ş', "U");
         charMap.put('ß', "Ya");
@@ -68,9 +68,9 @@ public class Transliterator {
         charMap.put('÷', "ch");
         charMap.put('ø', "sh");
         charMap.put('ù', "sh");
-        charMap.put('ú', "'");
+        charMap.put('ú', "");
         charMap.put('û', "y");
-        charMap.put('ü', "'");
+        charMap.put('ü', "");
         charMap.put('ı', "e");
         charMap.put('ş', "u");
         charMap.put('ÿ', "ya");
